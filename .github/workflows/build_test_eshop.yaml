@@ -59,7 +59,7 @@ jobs:
           npm run build -- --colors
       
       - name: Cache node modules and build folder
-        if: ${{ github.ref == "refs/heads/master" }}
+        if: ${{ github.ref == 'refs/heads/master' }}
         uses: actions/cache@v3
         with: 
           path: |
@@ -97,7 +97,7 @@ jobs:
   Deploy:
     needs: [Build, Test]
     runs-on: ubuntu-latest
-    if: ${{ github.ref == "refs/heads/master" }}
+    if: ${{ github.ref == 'refs/heads/master' }}
 
     steps: 
       - name: Git Checkout
