@@ -1,4 +1,4 @@
-name: "Build and test our eshop"
+name: 'Build and test our Eshop'
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 10
 
-      - name: Cache Node modules
+      - name: Cache node modules
         uses: actions/cache@v3
         with:
           path: node_modules
@@ -31,7 +31,6 @@ jobs:
       - name: Install packages with npm
         run: |
           npm ci
-
   Build:
     needs: Install
     runs-on: ubuntu-latest
@@ -47,21 +46,20 @@ jobs:
         with:
           node-version: 10
 
-      - name: Cache Node modules
+      - name: Cache node modules
         uses: actions/cache@v3
         with:
           path: node_modules
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
-          
+
       - name: Build
         run: |
           npm rebuild node-sass --force
           npm run build -- --colors
-      
       - name: Cache node modules and build folder
         if: ${{ github.ref == 'refs/heads/master' }}
         uses: actions/cache@v3
-        with: 
+        with:
           path: |
             ~/.npm
             ./node_modules
@@ -84,22 +82,21 @@ jobs:
         with:
           node-version: 10
 
-      - name: Cache Node modules
+      - name: Cache node modules
         uses: actions/cache@v3
         with:
           path: node_modules
           key: node_modules-${{ hashFiles('**/package-lock.json') }}
-          
-      - name: Run tests
+
+      - name: Run Tests
         run: |
           npm run test -- --colors
-
   Deploy:
     needs: [Build, Test]
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/master' }}
 
-    steps: 
+    steps:
       - name: Git Checkout
         uses: actions/checkout@v3
         with:
@@ -107,14 +104,14 @@ jobs:
 
       - name: Load node modules and build folder
         uses: actions/cache@v3
-        with: 
+        with:
           path: |
             ~/.npm
             ./node_modules
             ./build
           key: ${{ runner.os }}-build-${{ github.run_id }}
 
-      - name: Deploy Function
+      - name: Deploy function
         uses: lowply/deploy-firebase@v0.0.5
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
