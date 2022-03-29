@@ -114,7 +114,7 @@ jobs:
             ./build
           key: ${{ runner.os }}-build-${{ github.run_id }}
 
-      - name: Deploy to Firebase
+      - name: Deploy Function
         uses: lowply/deploy-firebase@v0.0.5
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
